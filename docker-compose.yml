@@ -1,7 +1,7 @@
 services:
   snippets:
     container_name: "infra-snippets-api"
-    image: ghcr.io/ingsis-group-4/snippets:latest
+    image: ghcr.io/snippetservices-group4/snippets:latest
     environment:
       GITHUB_ACTOR: "${GITHUB_ACTOR}"
       GITHUB_TOKEN: "${GITHUB_TOKEN}"
@@ -26,7 +26,7 @@ services:
 
   permissions:
     container_name: "infra-permissions-api"
-    image: ghcr.io/ingsis-group-4/permissions:latest
+    image: ghcr.io/snippetservices-group4/permissions:latest
     environment:
       GITHUB_ACTOR: "${GITHUB_ACTOR}"
       GITHUB_TOKEN: "${GITHUB_TOKEN}"
