@@ -1,0 +1,49 @@
+services:
+  snippets:
+    container_name: "infra-snippets-api"
+    image: ghcr.io/ingsis-group-4/snippets:latest
+    environment:
+      GITHUB_ACTOR: "${GITHUB_ACTOR}"
+      GITHUB_TOKEN: "${GITHUB_TOKEN}"
+      POSTGRES_USER: "${POSTGRES_USER}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+      POSTGRES_DB: "${S_POSTGRES_DB}"
+      POSTGRES_HOST: "${S_POSTGRES_HOST}"
+      PORT: "${PORT}"
+    ports:
+      - "${S_PORT}:${PORT}"
+
+  db-snippets:
+    container_name: "${S_POSTGRES_HOST}"
+    image: postgres:15
+    environment:
+      POSTGRES_USER: "${POSTGRES_USER}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+      POSTGRES_DB: "${S_POSTGRES_DB}"
+    ports:
+      - "${S_POSTGRES_PORT}:5432"
+
+
+  permissions:
+    container_name: "infra-permissions-api"
+    image: ghcr.io/ingsis-group-4/permissions:latest
+    environment:
+      GITHUB_ACTOR: "${GITHUB_ACTOR}"
+      GITHUB_TOKEN: "${GITHUB_TOKEN}"
+      POSTGRES_USER: "${POSTGRES_USER}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+      POSTGRES_DB: "${P_POSTGRES_DB}"
+      POSTGRES_HOST: "${P_POSTGRES_HOST}"
+      PORT: "${PORT}"
+    ports:
+      - "${P_PORT}:${PORT}"
+
+  db-permissions:
+    container_name: "${P_POSTGRES_HOST}"
+    image: postgres:15
+    environment:
+      POSTGRES_USER: "${POSTGRES_USER}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+      POSTGRES_DB: "${P_POSTGRES_DB}"
+    ports:
+      - "${P_POSTGRES_PORT}:5432"
