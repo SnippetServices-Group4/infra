@@ -51,3 +51,15 @@ services:
       POSTGRES_PASSWORD: "${PERMISSION_DB_PASSWORD}"
     ports:
       - "${PERMISSION_DB_PORT}:5432"
+
+
+  parser:
+    container_name: "${PARSER_APP_NAME}"
+    image: ghcr.io/snippetservices-group4/parsers-dev:latest
+    environment:
+      SPRING_APPLICATION_NAME: "${PARSER_APP_NAME}"
+      SPRING_PORT: "${PARSER_SPRING_PORT}"
+      GITHUB_USERNAME: "${GITHUB_USERNAME}"
+      GITHUB_TOKEN: "${GITHUB_TOKEN}"
+    ports:
+      - "${PARSER_SPRING_PORT}:${PARSER_SPRING_PORT}"
