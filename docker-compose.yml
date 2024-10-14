@@ -1,49 +1,53 @@
 services:
   snippets:
-    container_name: "infra-snippets-api"
+    container_name: "${SNIPPET_APP_NAME}"
     image: ghcr.io/snippetservices-group4/snippets:latest
     environment:
-      GITHUB_ACTOR: "${GITHUB_ACTOR}"
+      SPRING_APPLICATION_NAME: "${SNIPPET_APP_NAME}"
+      DB_USER: "${SNIPPET_DB_USER}"
+      DB_PASSWORD: "${SNIPPET_DB_PASSWORD}"
+      DB_HOST: "${SNIPPET_DB_HOST}"
+      DB_NAME: "${SNIPPET_DB_NAME}"
+      DB_PORT: "${SNIPPET_DB_PORT}"
+      SPRING_PORT: "${SNIPPET_SPRING_PORT}"
+      GITHUB_USERNAME: "${GITHUB_USERNAME}"
       GITHUB_TOKEN: "${GITHUB_TOKEN}"
-      POSTGRES_USER: "${POSTGRES_USER}"
-      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
-      POSTGRES_DB: "${S_POSTGRES_DB}"
-      POSTGRES_HOST: "${S_POSTGRES_HOST}"
-      PORT: "${PORT}"
     ports:
-      - "${S_PORT}:${PORT}"
+      - "${SNIPPET_SPRING_PORT}:${SNIPPET_SPRING_PORT}"
 
   db-snippets:
-    container_name: "${S_POSTGRES_HOST}"
+    container_name: "${SNIPPET_DB_HOST}"
     image: postgres:15
     environment:
-      POSTGRES_USER: "${POSTGRES_USER}"
-      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
-      POSTGRES_DB: "${S_POSTGRES_DB}"
+      POSTGRES_DB: "${SNIPPET_DB_NAME}"
+      POSTGRES_USER: "${SNIPPET_DB_USER}"
+      POSTGRES_PASSWORD: "${SNIPPET_DB_PASSWORD}"
     ports:
-      - "${S_POSTGRES_PORT}:5432"
+      - "${SNIPPET_DB_PORT}:5432"
 
 
   permissions:
-    container_name: "infra-permissions-api"
+    container_name: "${PERMISSION_APP_NAME}"
     image: ghcr.io/snippetservices-group4/permissions:latest
     environment:
-      GITHUB_ACTOR: "${GITHUB_ACTOR}"
+      SPRING_APPLICATION_NAME: "${PERMISSION_APP_NAME}"
+      DB_USER: "${PERMISSION_DB_USER}"
+      DB_PASSWORD: "${PERMISSION_DB_PASSWORD}"
+      DB_HOST: "${PERMISSION_DB_HOST}"
+      DB_NAME: "${PERMISSION_DB_NAME}"
+      DB_PORT: "${PERMISSION_DB_PORT}"
+      SPRING_PORT: "${PERMISSION_SPRING_PORT}"
+      GITHUB_USERNAME: "${GITHUB_USERNAME}"
       GITHUB_TOKEN: "${GITHUB_TOKEN}"
-      POSTGRES_USER: "${POSTGRES_USER}"
-      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
-      POSTGRES_DB: "${P_POSTGRES_DB}"
-      POSTGRES_HOST: "${P_POSTGRES_HOST}"
-      PORT: "${PORT}"
     ports:
-      - "${P_PORT}:${PORT}"
+      - "${PERMISSION_SPRING_PORT}:${PERMISSION_SPRING_PORT}"
 
   db-permissions:
-    container_name: "${P_POSTGRES_HOST}"
+    container_name: "${PERMISSION_DB_HOST}"
     image: postgres:15
     environment:
-      POSTGRES_USER: "${POSTGRES_USER}"
-      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
-      POSTGRES_DB: "${P_POSTGRES_DB}"
+      POSTGRES_DB: "${PERMISSION_DB_NAME}"
+      POSTGRES_USER: "${PERMISSION_DB_USER}"
+      POSTGRES_PASSWORD: "${PERMISSION_DB_PASSWORD}"
     ports:
-      - "${P_POSTGRES_PORT}:5432"
+      - "${PERMISSION_DB_PORT}:5432"
