@@ -1,0 +1,53 @@
+services:
+  snippets:
+    container_name: "${SNIPPET_APP_NAME}"
+    image: ghcr.io/snippetservices-group4/snippets-dev:latest
+    environment:
+      SPRING_APPLICATION_NAME: "${SNIPPET_APP_NAME}"
+      DB_USER: "${SNIPPET_DB_USER}"
+      DB_PASSWORD: "${SNIPPET_DB_PASSWORD}"
+      DB_HOST: "${SNIPPET_DB_HOST}"
+      DB_NAME: "${SNIPPET_DB_NAME}"
+      DB_PORT: "${SNIPPET_DB_PORT}"
+      SPRING_PORT: "${SNIPPET_SPRING_PORT}"
+      GITHUB_USERNAME: "${GITHUB_USERNAME}"
+      GITHUB_TOKEN: "${GITHUB_TOKEN}"
+    ports:
+      - "${SNIPPET_SPRING_PORT}:${SNIPPET_SPRING_PORT}"
+
+  db-snippets:
+    container_name: "${SNIPPET_DB_HOST}"
+    image: postgres:15
+    environment:
+      POSTGRES_DB: "${SNIPPET_DB_NAME}"
+      POSTGRES_USER: "${SNIPPET_DB_USER}"
+      POSTGRES_PASSWORD: "${SNIPPET_DB_PASSWORD}"
+    ports:
+      - "${SNIPPET_DB_PORT}:5432"
+
+
+  permissions:
+    container_name: "${PERMISSION_APP_NAME}"
+    image: ghcr.io/snippetservices-group4/permissions-dev:latest
+    environment:
+      SPRING_APPLICATION_NAME: "${PERMISSION_APP_NAME}"
+      DB_USER: "${PERMISSION_DB_USER}"
+      DB_PASSWORD: "${PERMISSION_DB_PASSWORD}"
+      DB_HOST: "${PERMISSION_DB_HOST}"
+      DB_NAME: "${PERMISSION_DB_NAME}"
+      DB_PORT: "${PERMISSION_DB_PORT}"
+      SPRING_PORT: "${PERMISSION_SPRING_PORT}"
+      GITHUB_USERNAME: "${GITHUB_USERNAME}"
+      GITHUB_TOKEN: "${GITHUB_TOKEN}"
+    ports:
+      - "${PERMISSION_SPRING_PORT}:${PERMISSION_SPRING_PORT}"
+
+  db-permissions:
+    container_name: "${PERMISSION_DB_HOST}"
+    image: postgres:15
+    environment:
+      POSTGRES_DB: "${PERMISSION_DB_NAME}"
+      POSTGRES_USER: "${PERMISSION_DB_USER}"
+      POSTGRES_PASSWORD: "${PERMISSION_DB_PASSWORD}"
+    ports:
+      - "${PERMISSION_DB_PORT}:5432"
