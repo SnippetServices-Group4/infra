@@ -76,7 +76,8 @@ services:
       - ./certbot/conf:/etc/letsencrypt
 
   certbot:
-    image: certbot/certbot
+    build:
+      context: .
     container_name: certbot
     volumes:
       - ./certbot/conf:/etc/letsencrypt
