@@ -74,10 +74,10 @@ services:
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
       - /etc/nginx/certs:/etc/nginx/certs:ro
-      - react-app:/usr/share/nginx/html:ro  # Serve React app static files directly from react-app volume
+      - react-app:/usr/share/nginx/html:ro
 
   react-app:
-    image: ghcr.io/snippetservices-group4/react-app:latest
+    image: ghcr.io/snippetservices-group4/react-app-dev:latest
     container_name: react-app
     environment:
       - VITE_AUTH0_DOMAIN=${VITE_AUTH0_DOMAIN}
