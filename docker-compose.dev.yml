@@ -3,20 +3,24 @@ services:
     container_name: "${SNIPPET_APP_NAME}"
     image: ghcr.io/snippetservices-group4/snippets-dev:latest
     environment:
-      SPRING_APPLICATION_NAME: "${SNIPPET_APP_NAME}"
-      SPRING_PORT: "${SNIPPET_SPRING_PORT}"
-      BUCKET_PORT: "${BUCKET_PORT}"
+      DB_USER: "${SNIPPET_DB_USER}"
+      DB_PASSWORD: "${SNIPPET_DB_PASSWORD}"
+      DB_NAME: "${SNIPPET_DB_NAME}"
+      DB_HOST: "${SNIPPET_DB_HOST}"
+      DB_PORT: "${SNIPPET_DB_PORT}"
+      SPRING_PORT: "${SPRING_PORT}"
+      SPRING_APPLICATION_NAME: "${SPRING_APPLICATION_NAME}"
     ports:
       - "${SNIPPET_SPRING_PORT}:${SNIPPET_SPRING_PORT}"
-
+    depends_on:
+      - db-snippets
   db-snippets:
     container_name: "${SNIPPET_DB_HOST}"
     image: postgres:15
     environment:
-      DB_HOST: "${SNIPPET_DB_HOST}"
-      DB_NAME: "${SNIPPET_DB_NAME}"
-      DB_USER: "${SNIPPET_DB_USER}"
-      DB_PASSWORD: "${SNIPPET_DB_PASSWORD}"
+      POSTGRES_DB: "${SNIPPET_DB_NAME}"
+      POSTGRES_USER: "${SNIPPET_DB_USER}"
+      POSTGRES_PASSWORD: "${SNIPPET_DB_PASSWORD}"
       DB_PORT: "${SNIPPET_DB_PORT}"
     ports:
       - "${SNIPPET_DB_PORT}:5432"
@@ -76,5 +80,31 @@ services:
       - VITE_AUTH0_AUDIENCE=${VITE_AUTH0_AUDIENCE}
       - VITE_BACKEND_URL=${VITE_BACKEND_URL}
 
+  # snippet-asset-service
+  asset-api:
+    container_name: "asset_service"
+    image: ghcr.io/austral-ingsis/snippet-asset-service:latest
+    ports:
+      - "${BUCKET_PORT}:8080"
+    environment:
+      AZURE_HOST: "http://azurite"
+      NEW_RELIC_APP_NAME: "asset-service"
+      NEW_RELIC_AGENT_ENABLED: "false"
+
+  azurite:
+    image: mcr.microsoft.com/azure-storage/azurite
+    container_name: "azurite-snippets"
+    hostname: azurite-snippets
+    restart: always
+    ports:
+      - "10000:10000"
+      - "10001:10001"
+      - "10002:10002"
+    volumes:
+      - blob:/workspace
+
 volumes:
   react-app:
+  db_data:
+  blob:
+    external: false
