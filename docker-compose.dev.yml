@@ -4,11 +4,6 @@ services:
     image: ghcr.io/snippetservices-group4/snippets-dev:latest
     environment:
       SPRING_APPLICATION_NAME: "${SNIPPET_APP_NAME}"
-      DB_USER: "${SNIPPET_DB_USER}"
-      DB_PASSWORD: "${SNIPPET_DB_PASSWORD}"
-      DB_HOST: "${SNIPPET_DB_HOST}"
-      DB_NAME: "${SNIPPET_DB_NAME}"
-      DB_PORT: "${SNIPPET_DB_PORT}"
       SPRING_PORT: "${SNIPPET_SPRING_PORT}"
       BUCKET_PORT: "${BUCKET_PORT}"
     ports:
@@ -18,9 +13,11 @@ services:
     container_name: "${SNIPPET_DB_HOST}"
     image: postgres:15
     environment:
-      POSTGRES_DB: "${SNIPPET_DB_NAME}"
-      POSTGRES_USER: "${SNIPPET_DB_USER}"
-      POSTGRES_PASSWORD: "${SNIPPET_DB_PASSWORD}"
+      DB_HOST: "${SNIPPET_DB_HOST}"
+      DB_NAME: "${SNIPPET_DB_NAME}"
+      DB_USER: "${SNIPPET_DB_USER}"
+      DB_PASSWORD: "${SNIPPET_DB_PASSWORD}"
+      DB_PORT: "${SNIPPET_DB_PORT}"
     ports:
       - "${SNIPPET_DB_PORT}:5432"
 
@@ -56,12 +53,6 @@ services:
       SPRING_PORT: "${PARSER_SPRING_PORT}"
     ports:
       - "${PARSER_SPRING_PORT}:${PARSER_SPRING_PORT}"
-
-  helloworld:
-    container_name: helloworld
-    image: crccheck/hello-world
-    expose:
-      - 8000
 
   nginx:
     container_name: nginx
