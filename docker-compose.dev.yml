@@ -73,7 +73,16 @@ services:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - /etc/nginx/certs:/etc/nginx/certs:ro
     depends_on:
-      - helloworld
+      - react-app
+
+  react-app:
+    image: ghcr.io/snippetservices-group4/react-app-dev:latest
+    container_name: react-app
+    environment:
+      - VITE_AUTH0_DOMAIN=${VITE_AUTH0_DOMAIN}
+      - VITE_AUTH0_CLIENT_ID=${VITE_AUTH0_CLIENT_ID}
+      - VITE_AUTH0_AUDIENCE=${VITE_AUTH0_AUDIENCE}
+      - VITE_BACKEND_URL=${VITE_BACKEND_URL}
 
 volumes:
   react-app:
