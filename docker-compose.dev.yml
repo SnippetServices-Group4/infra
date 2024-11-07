@@ -23,7 +23,6 @@ services:
     ports:
       - "${SNIPPET_DB_PORT}:5432"
 
-
   permissions:
     container_name: "${PERMISSION_APP_NAME}"
     image: ghcr.io/snippetservices-group4/permissions-dev:latest
@@ -47,7 +46,6 @@ services:
       POSTGRES_PASSWORD: "${PERMISSION_DB_PASSWORD}"
     ports:
       - "${PERMISSION_DB_PORT}:5432"
-
 
   parser:
     container_name: "${PARSER_APP_NAME}"
@@ -88,3 +86,6 @@ services:
       - VITE_BACKEND_URL=${VITE_BACKEND_URL}
     volumes:
       - react-app:/app:ro
+
+volumes:
+  react-app:
