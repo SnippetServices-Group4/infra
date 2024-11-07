@@ -10,6 +10,7 @@ services:
       DB_NAME: "${SNIPPET_DB_NAME}"
       DB_PORT: "${SNIPPET_DB_PORT}"
       SPRING_PORT: "${SNIPPET_SPRING_PORT}"
+      BUCKET_PORT: "${BUCKET_PORT}"
     ports:
       - "${SNIPPET_SPRING_PORT}:${SNIPPET_SPRING_PORT}"
 
