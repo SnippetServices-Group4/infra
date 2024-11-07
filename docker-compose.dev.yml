@@ -69,13 +69,14 @@ services:
     restart: unless-stopped
     image: nginx
     ports:
-      - 80:80
-      - 443:443
+      - "80:80"
+      - "443:443"
     volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - /etc/nginx/certs:/etc/nginx/certs:ro
       - react-app:/usr/share/nginx/html:ro
-      - /etc/nginx/mime.types:/etc/nginx/mime.types:ro
+    depends_on:
+      - react-app
 
   react-app:
     image: ghcr.io/snippetservices-group4/react-app-dev:latest
@@ -87,6 +88,3 @@ services:
       - VITE_BACKEND_URL=${VITE_BACKEND_URL}
     volumes:
       - react-app:/app:ro
-
-volumes:
-  react-app:
