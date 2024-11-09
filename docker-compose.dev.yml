@@ -58,7 +58,7 @@ services:
   nginx:
     container_name: nginx
     restart: unless-stopped
-    image: openresty/openresty:alpine
+    image: openresty/openresty:latest
     ports:
       - "80:80"
       - "443:443"
