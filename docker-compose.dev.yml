@@ -58,9 +58,8 @@ services:
   nginx:
     container_name: nginx
     restart: unless-stopped
-    build:
-      context: .
-      dockerfile: Dockerfile  # This will point to the local Dockerfile we will define below
+    image:
+        nginx:latest
     ports:
       - "80:80"
       - "443:443"
@@ -75,6 +74,7 @@ services:
       - snippets
       - permissions
       - parser
+    command: /bin/bash -c "apt-get update && apt-get install -y lua5.1 libluajit-5.1-dev && nginx -g 'daemon off;'"
 
   react-app:
     image: ghcr.io/snippetservices-group4/react-app-dev:latest
