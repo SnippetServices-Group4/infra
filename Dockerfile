@@ -1,6 +1,8 @@
 # Start with the official Nginx image
 FROM nginx:latest
 
+ARG CLOUD_ENVIRONMENT
+
 # Install dependencies for Lua and Nginx Lua module
 RUN apt-get update && \
     apt-get install -y \
