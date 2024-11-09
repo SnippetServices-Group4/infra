@@ -58,17 +58,23 @@ services:
   nginx:
     container_name: nginx
     restart: unless-stopped
-    image: nginx
+    build:
+      context: .
+      dockerfile: Dockerfile  # This will point to the local Dockerfile we will define below
     ports:
       - "80:80"
       - "443:443"
     volumes:
       - ./nginx/${CLOUD_ENVIRONMENT}-nginx.conf:/etc/nginx/nginx.conf:ro
       - /etc/nginx/certs:/etc/nginx/certs:ro
+      - ./lua:/etc/nginx/lua:ro
     environment:
       - CLOUD_ENVIRONMENT=${CLOUD_ENVIRONMENT}
     depends_on:
       - react-app
+      - ${SNIPPET_APP_NAME}
+      - ${PERMISSION_APP_NAME}
+      - ${PARSER_APP_NAME}
 
   react-app:
     image: ghcr.io/snippetservices-group4/react-app-dev:latest
