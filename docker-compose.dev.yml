@@ -12,6 +12,8 @@ services:
       SPRING_APPLICATION_NAME: "${SNIPPET_APP_NAME}"
     depends_on:
       - db-snippets
+    ports:
+      - "${SNIPPET_SPRING_PORT}:${SNIPPET_SPRING_PORT}"
 
   db-snippets:
     container_name: "${SNIPPET_DB_HOST}"
@@ -70,6 +72,18 @@ services:
       - CLOUD_ENVIRONMENT=${CLOUD_ENVIRONMENT}
     depends_on:
       - react-app
+      - snippets
+      - permissions
+      - parser
+      - auth-middleware
+
+  auth-middleware:
+    image: ghcr.io/snippetservices-group4/auth-middleware-dev:latest
+    container_name: auth-middleware
+    environment:
+      AUTH0_AUDIENCE: ${AUTH0_AUDIENCE}
+      AUTH0_SECRET_KEY: ${AUTH0_SECRET_KEY}
+    depends_on:
       - snippets
       - permissions
       - parser
