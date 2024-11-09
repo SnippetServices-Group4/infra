@@ -12,8 +12,6 @@ services:
       SPRING_APPLICATION_NAME: "${SNIPPET_APP_NAME}"
     depends_on:
       - db-snippets
-    ports:
-      - "${SNIPPET_SPRING_PORT}:${SNIPPET_SPRING_PORT}"
 
   db-snippets:
     container_name: "${SNIPPET_DB_HOST}"
