@@ -58,8 +58,9 @@ services:
   nginx:
     container_name: nginx
     restart: unless-stopped
-    image:
-        nginx:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
       - "80:80"
       - "443:443"
