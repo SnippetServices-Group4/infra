@@ -1,6 +1,9 @@
 # Start with the official Nginx image
 FROM nginx:latest
 
+# Set the build argument for CLOUD_ENVIRONMENT
+ARG CLOUD_ENVIRONMENT
+
 # Install dependencies for Lua and Nginx Lua module
 RUN apt-get update && \
     apt-get install -y \
@@ -9,7 +12,7 @@ RUN apt-get update && \
     wget \
     && rm -rf /var/lib/apt/lists/*
 
-# Install the ngx_http_lua_module
+# Install the ngx_http_lua_module (if needed)
 RUN wget https://github.com/openresty/ngx_http_lua_module/archive/refs/tags/v0.10.19.tar.gz && \
     tar -xzvf v0.10.19.tar.gz && \
     cd ngx_http_lua_module-0.10.19 && \
@@ -20,8 +23,10 @@ RUN wget https://github.com/openresty/ngx_http_lua_module/archive/refs/tags/v0.1
     make && \
     make install
 
-# Copy the Lua files and Nginx config into the container
+# Copy the correct Nginx config based on the argument
 COPY ./nginx/${CLOUD_ENVIRONMENT}-nginx.conf /etc/nginx/nginx.conf
+
+# Copy Lua scripts into the container
 COPY ./lua /etc/nginx/lua
 
 # Expose necessary ports
