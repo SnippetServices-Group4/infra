@@ -3,15 +3,15 @@ services:
     container_name: "${SNIPPET_APP_NAME}"
     image: ghcr.io/snippetservices-group4/snippets:latest
     environment:
-      SPRING_APPLICATION_NAME: "${SNIPPET_APP_NAME}"
       DB_USER: "${SNIPPET_DB_USER}"
       DB_PASSWORD: "${SNIPPET_DB_PASSWORD}"
-      DB_HOST: "${SNIPPET_DB_HOST}"
       DB_NAME: "${SNIPPET_DB_NAME}"
+      DB_HOST: "${SNIPPET_DB_HOST}"
       DB_PORT: "${SNIPPET_DB_PORT}"
       SPRING_PORT: "${SNIPPET_SPRING_PORT}"
-    ports:
-      - "${SNIPPET_SPRING_PORT}:${SNIPPET_SPRING_PORT}"
+      SPRING_APPLICATION_NAME: "${SNIPPET_APP_NAME}"
+    depends_on:
+      - db-snippets
 
   db-snippets:
     container_name: "${SNIPPET_DB_HOST}"
@@ -20,9 +20,9 @@ services:
       POSTGRES_DB: "${SNIPPET_DB_NAME}"
       POSTGRES_USER: "${SNIPPET_DB_USER}"
       POSTGRES_PASSWORD: "${SNIPPET_DB_PASSWORD}"
+      DB_PORT: "${SNIPPET_DB_PORT}"
     ports:
       - "${SNIPPET_DB_PORT}:5432"
-
 
   permissions:
     container_name: "${PERMISSION_APP_NAME}"
@@ -35,8 +35,8 @@ services:
       DB_NAME: "${PERMISSION_DB_NAME}"
       DB_PORT: "${PERMISSION_DB_PORT}"
       SPRING_PORT: "${PERMISSION_SPRING_PORT}"
-    ports:
-      - "${PERMISSION_SPRING_PORT}:${PERMISSION_SPRING_PORT}"
+    depends_on:
+      - db-permissions
 
   db-permissions:
     container_name: "${PERMISSION_DB_HOST}"
@@ -48,12 +48,73 @@ services:
     ports:
       - "${PERMISSION_DB_PORT}:5432"
 
-
   parser:
     container_name: "${PARSER_APP_NAME}"
     image: ghcr.io/snippetservices-group4/parsers:latest
     environment:
       SPRING_APPLICATION_NAME: "${PARSER_APP_NAME}"
       SPRING_PORT: "${PARSER_SPRING_PORT}"
+
+  nginx:
+    container_name: nginx
+    restart: unless-stopped
+    image:
+      nginx:latest
     ports:
-      - "${PARSER_SPRING_PORT}:${PARSER_SPRING_PORT}"
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/${CLOUD_ENVIRONMENT}-nginx.conf:/etc/nginx/nginx.conf:ro
+      - /etc/nginx/certs:/etc/nginx/certs:ro
+    environment:
+      - CLOUD_ENVIRONMENT=${CLOUD_ENVIRONMENT}
+    depends_on:
+      - react-app
+      - snippets
+      - permissions
+      - parser
+      - auth-middleware
+
+  auth-middleware:
+    image: ghcr.io/snippetservices-group4/auth-middleware:latest
+    container_name: auth-middleware
+    environment:
+      AUTH0_AUDIENCE: ${AUTH0_AUDIENCE}
+      AUTH0_SECRET_KEY: ${AUTH0_SECRET_KEY}
+    depends_on:
+      - snippets
+      - permissions
+      - parser
+
+  react-app:
+    image: ghcr.io/snippetservices-group4/react-app:latest
+    container_name: react-app
+
+  # snippet-asset-service
+  asset-api:
+    container_name: "asset_service"
+    image: ghcr.io/austral-ingsis/snippet-asset-service:latest
+    ports:
+      - "${BUCKET_PORT}:8080"
+    environment:
+      AZURE_HOST: "http://azurite"
+      NEW_RELIC_APP_NAME: "asset-service"
+      NEW_RELIC_AGENT_ENABLED: "false"
+
+  azurite:
+    image: mcr.microsoft.com/azure-storage/azurite
+    container_name: "azurite-snippets"
+    hostname: azurite-snippets
+    restart: always
+    ports:
+      - "10000:10000"
+      - "10001:10001"
+      - "10002:10002"
+    volumes:
+      - blob:/workspace
+
+volumes:
+  react-app:
+  db_data:
+  blob:
+    external: false
