@@ -43,6 +43,7 @@ services:
       REDIS_PORT: "${REDIS_PORT}"
     depends_on:
       - db-permissions
+      - redis
 
   db-permissions:
     container_name: "${PERMISSION_DB_HOST}"
