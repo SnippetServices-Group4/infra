@@ -10,6 +10,8 @@ services:
       DB_PORT: "${SNIPPET_DB_PORT}"
       SPRING_PORT: "${SNIPPET_SPRING_PORT}"
       SPRING_APPLICATION_NAME: "${SNIPPET_APP_NAME}"
+      PERMISSIONS_SERVICE_URL: "${PERMISSIONS_SERVICE_URL}"
+      PARSER_SERVICE_URL: "${PARSER_SERVICE_URL}"
     depends_on:
       - db-snippets
 
@@ -35,6 +37,7 @@ services:
       DB_NAME: "${PERMISSION_DB_NAME}"
       DB_PORT: "${PERMISSION_DB_PORT}"
       SPRING_PORT: "${PERMISSION_SPRING_PORT}"
+      PARSER_SERVICE_URL: "${PARSER_SERVICE_URL}"
     depends_on:
       - db-permissions
 
