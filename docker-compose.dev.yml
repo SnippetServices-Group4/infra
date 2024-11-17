@@ -81,6 +81,10 @@ services:
       NEW_RELIC_LOG_EXTENSION_ADD_MDC: "true"
       REDIS_HOST: "${REDIS_HOST}"
       REDIS_PORT: "${REDIS_PORT}"
+    depends_on:
+      - db-snippets
+      - db-permissions
+      - redis
 
   nginx:
     container_name: nginx
@@ -119,7 +123,7 @@ services:
 
   # snippet-asset-service
   asset-api:
-    container_name: "asset_service"
+    container_name: "infra-asset_service"
     image: ghcr.io/austral-ingsis/snippet-asset-service:latest
     environment:
       AZURE_HOST: "http://azurite"
@@ -128,7 +132,7 @@ services:
 
   azurite:
     image: mcr.microsoft.com/azure-storage/azurite
-    container_name: "azurite-snippets"
+    container_name: "infra-azurite-snippets"
     hostname: azurite-snippets
     ports:
       - "10000:10000"
