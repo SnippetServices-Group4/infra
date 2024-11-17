@@ -13,8 +13,13 @@ services:
       PERMISSIONS_SERVICE_URL: "${PERMISSIONS_SERVICE_URL}"
       PARSER_SERVICE_URL: "${PARSER_SERVICE_URL}"
       ASSET_SERVICE_URL: "${ASSET_SERVICE_URL}"
+      NEW_RELIC_LICENSE_KEY: "${NEW_RELIC_LICENSE_KEY}"
+      NEW_RELIC_APP_NAME: "printscript-service"
+      NEW_RELIC_AGENT_ENABLED: "true"
+      NEW_RELIC_LOG_EXTENSION_ADD_MDC: "true"
     depends_on:
       - db-snippets
+    restart: unless-stopped
 
   db-snippets:
     container_name: "${SNIPPET_DB_HOST}"
@@ -26,6 +31,7 @@ services:
       DB_PORT: "${SNIPPET_DB_PORT}"
     ports:
       - "${SNIPPET_DB_PORT}:5432"
+    restart: unless-stopped
 
   permissions:
     container_name: "${PERMISSION_APP_NAME}"
@@ -41,9 +47,14 @@ services:
       PARSER_SERVICE_URL: "${PARSER_SERVICE_URL}"
       REDIS_HOST: "${REDIS_HOST}"
       REDIS_PORT: "${REDIS_PORT}"
+      NEW_RELIC_LICENSE_KEY: "${NEW_RELIC_LICENSE_KEY}"
+      NEW_RELIC_APP_NAME: "permissions-service"
+      NEW_RELIC_AGENT_ENABLED: "true"
+      NEW_RELIC_LOG_EXTENSION_ADD_MDC: "true"
     depends_on:
       - db-permissions
       - redis
+    restart: unless-stopped
 
   db-permissions:
     container_name: "${PERMISSION_DB_HOST}"
@@ -54,6 +65,7 @@ services:
       POSTGRES_PASSWORD: "${PERMISSION_DB_PASSWORD}"
     ports:
       - "${PERMISSION_DB_PORT}:5432"
+    restart: unless-stopped
 
   redis:
     container_name: "${REDIS_HOST}"
@@ -67,6 +79,11 @@ services:
     environment:
       SPRING_APPLICATION_NAME: "${PARSER_APP_NAME}"
       SPRING_PORT: "${PARSER_SPRING_PORT}"
+      NEW_RELIC_LICENSE_KEY: "${NEW_RELIC_LICENSE_KEY}"
+      NEW_RELIC_APP_NAME: "parser-service"
+      NEW_RELIC_AGENT_ENABLED: "true"
+      NEW_RELIC_LOG_EXTENSION_ADD_MDC: "true"
+    restart: unless-stopped
 
   nginx:
     container_name: nginx
@@ -111,18 +128,20 @@ services:
       AZURE_HOST: "http://azurite"
       NEW_RELIC_APP_NAME: "asset-service"
       NEW_RELIC_AGENT_ENABLED: "false"
+    restart: unless-stopped
 
   azurite:
     image: mcr.microsoft.com/azure-storage/azurite
     container_name: "azurite-snippets"
     hostname: azurite-snippets
-    restart: always
+    restart: unless-stopped
     ports:
       - "10000:10000"
       - "10001:10001"
       - "10002:10002"
     volumes:
       - blob:/workspace
+
 
 volumes:
   react-app:
