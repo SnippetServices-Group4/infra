@@ -1,0 +1,11 @@
+license_key: ${NEW_RELIC_LICENSE_KEY}
+
+enable_process_metrics: true
+verbose: 1
+application_logging:
+  forwarding:
+    context data:
+      enabled: true
+  local_decorating:
+    enabled: true
+
