@@ -28,8 +28,9 @@ services:
       POSTGRES_USER: "${SNIPPET_DB_USER}"
       POSTGRES_PASSWORD: "${SNIPPET_DB_PASSWORD}"
       DB_PORT: "${SNIPPET_DB_PORT}"
-    ports:
-      - "${SNIPPET_DB_PORT}:5432"
+#    UN-comment the following line to expose the database port
+#    ports:
+#      - "${SNIPPET_DB_PORT}:5432"
 
   permissions:
     container_name: "${PERMISSION_APP_NAME}"
@@ -60,8 +61,9 @@ services:
       POSTGRES_DB: "${PERMISSION_DB_NAME}"
       POSTGRES_USER: "${PERMISSION_DB_USER}"
       POSTGRES_PASSWORD: "${PERMISSION_DB_PASSWORD}"
-    ports:
-      - "${PERMISSION_DB_PORT}:5432"
+#    UN-comment the following line to expose the database port
+#    ports:
+#      - "${PERMISSION_DB_PORT}:5432"
 
   redis:
     container_name: "${REDIS_HOST}"
@@ -123,7 +125,7 @@ services:
 
   # snippet-asset-service
   asset-api:
-    container_name: "infra-asset_service"
+    container_name: "${ASSET_SERVICE_NAME}"
     image: ghcr.io/austral-ingsis/snippet-asset-service:latest
     environment:
       AZURE_HOST: "http://azurite"
@@ -132,7 +134,7 @@ services:
 
   azurite:
     image: mcr.microsoft.com/azure-storage/azurite
-    container_name: "infra-azurite-snippets"
+    container_name: "${AZURITE_NAME}"
     hostname: azurite-snippets
     ports:
       - "10000:10000"
