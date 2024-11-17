@@ -83,6 +83,8 @@ services:
       NEW_RELIC_APP_NAME: "parser-service"
       NEW_RELIC_AGENT_ENABLED: "true"
       NEW_RELIC_LOG_EXTENSION_ADD_MDC: "true"
+      REDIS_HOST: "${REDIS_HOST}"
+      REDIS_PORT: "${REDIS_PORT}"
     restart: unless-stopped
 
   nginx:
