@@ -85,6 +85,7 @@ services:
       NEW_RELIC_LOG_EXTENSION_ADD_MDC: "true"
       REDIS_HOST: "${REDIS_HOST}"
       REDIS_PORT: "${REDIS_PORT}"
+      ASSET_SERVICE_URL: "${ASSET_SERVICE_URL}"
     depends_on:
       - db-snippets
       - db-permissions
