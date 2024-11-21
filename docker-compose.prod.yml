@@ -46,6 +46,7 @@ services:
       DB_PORT: "${PERMISSION_DB_PORT}"
       SPRING_PORT: "${PERMISSION_SPRING_PORT}"
       PARSER_SERVICE_URL: "${PARSER_SERVICE_URL}"
+      SNIPPETS_SERVICE_URL: "${SNIPPETS_SERVICE_URL}"
       REDIS_HOST: "${REDIS_HOST}"
       REDIS_PORT: "${REDIS_PORT}"
       NEW_RELIC_LICENSE_KEY: "${NEW_RELIC_LICENSE_KEY}"
@@ -70,8 +71,6 @@ services:
   redis:
     container_name: "${REDIS_HOST}"
     image: redis:6-alpine
-    ports:
-      - ${REDIS_PORT}:${REDIS_PORT}
 
   parser:
     container_name: "${PARSER_APP_NAME}"
@@ -139,11 +138,6 @@ services:
     image: mcr.microsoft.com/azure-storage/azurite
     container_name: "azurite-snippets"
     hostname: azurite-snippets
-    restart: always
-    ports:
-      - "10000:10000"
-      - "10001:10001"
-      - "10002:10002"
     volumes:
       - blob:/workspace
 
